@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISRO - Indian Space Research Organisation</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#0F3460',secondary:'#E94560'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+}
+.hero-section {
+background-image: linear-gradient(to right, rgba(15, 52, 96, 0.85), rgba(15, 52, 96, 0.6), rgba(15, 52, 96, 0.1)), url('https://readdy.ai/api/search-image?query=A%20stunning%20futuristic%20visualization%20of%20space%20exploration%20with%20a%20modern%20spacecraft%20approaching%20Mars%2C%20featuring%20advanced%20propulsion%20systems%20and%20detailed%20surface%20features%20of%20the%20red%20planet.%20The%20scene%20includes%20Earth%20visible%20in%20the%20background%20with%20stars%20and%20nebulae%20creating%20a%20dramatic%20cosmic%20atmosphere.%20The%20composition%20emphasizes%20technological%20advancement%20and%20scientific%20achievement.&width=1920&height=1080&seq=isro1&orientation=landscape');
+background-size: cover;
+background-position: center;
+}
+.particle {
+position: absolute;
+background: white;
+border-radius: 50%;
+pointer-events: none;
+opacity: 0;
+}
+@keyframes float {
+0% { transform: translateY(0px); }
+50% { transform: translateY(-20px); }
+100% { transform: translateY(0px); }
+}
+.floating {
+animation: float 6s ease-in-out infinite;
+}
+.timeline-progress {
+position: absolute;
+left: 0;
+top: 0;
+height: 100%;
+width: 4px;
+background: #0F3460;
+transform-origin: top;
+transform: scaleY(0);
+transition: transform 0.4s ease;
+}
+.satellite-dot {
+width: 12px;
+height: 12px;
+background: #0F3460;
+border-radius: 50%;
+position: absolute;
+transform: translate(-50%, -50%);
+transition: all 0.3s ease;
+cursor: pointer;
+}
+.satellite-dot:hover {
+transform: translate(-50%, -50%) scale(1.5);
+}
+.satellite-tooltip {
+position: absolute;
+background: white;
+padding: 8px 12px;
+border-radius: 8px;
+box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+font-size: 14px;
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s ease;
+white-space: nowrap;
+}
+.mission-card {
+transition: transform 0.3s ease;
+}
+.mission-card:hover {
+transform: translateY(-10px);
+}
+.mission-card:hover .mission-overlay {
+opacity: 1;
+}
+.news-date {
+writing-mode: vertical-rl;
+text-orientation: mixed;
+}
+.custom-checkbox {
+position: relative;
+padding-left: 30px;
+cursor: pointer;
+}
+.custom-checkbox input {
+position: absolute;
+opacity: 0;
+cursor: pointer;
+}
+.checkmark {
+position: absolute;
+top: 0;
+left: 0;
+height: 20px;
+width: 20px;
+border: 2px solid #0F3460;
+border-radius: 4px;
+}
+.custom-checkbox input:checked ~ .checkmark:after {
+content: "";
+position: absolute;
+display: block;
+left: 6px;
+top: 2px;
+width: 5px;
+height: 10px;
+border: solid #0F3460;
+border-width: 0 2px 2px 0;
+transform: rotate(45deg);
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 50px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+transition: .4s;
+border-radius: 24px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 16px;
+width: 16px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #0F3460;
+}
+input:checked + .slider:before {
+transform: translateX(26px);
+}
+select {
+appearance: none;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230F3460'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+background-repeat: no-repeat;
+background-position: right 0.5rem center;
+background-size: 1.5em 1.5em;
+}
+.satellite-tracker {
+background-image: url('https://public.readdy.ai/gen_page/map_placeholder_1280x720.png');
+background-size: cover;
+background-position: center;
+}
+</style>
+</head>
+<body class="bg-gray-50">
+<!-- Header -->
+<header class="bg-white shadow-sm fixed w-full z-50">
+<div class="container mx-auto px-4 py-3 flex items-center justify-between">
+<div class="flex items-center">
+<div class="text-3xl font-['Pacifico'] text-primary mr-10">ISRO</div>
+<nav class="hidden md:flex space-x-8">
+<a href="#" class="text-gray-800 hover:text-primary font-medium transition-colors">About</a>
+<a href="#" class="text-gray-800 hover:text-primary font-medium transition-colors">Missions</a>
+<a href="#" class="text-gray-800 hover:text-primary font-medium transition-colors">Research</a>
+<a href="#" class="text-gray-800 hover:text-primary font-medium transition-colors">Gallery</a>
+<a href="#" class="text-gray-800 hover:text-primary font-medium transition-colors">News</a>
+<a href="#" class="text-gray-800 hover:text-primary font-medium transition-colors">Career</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<div class="relative hidden md:block">
+<input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-full border-none bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm w-48">
+<div class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-500">
+<i class="ri-search-line"></i>
+</div>
+</div>
+<div class="relative">
+<button class="flex items-center space-x-1 text-gray-800 hover:text-primary">
+<span>EN</span>
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</button>
+</div>
+<button class="md:hidden w-10 h-10 flex items-center justify-center text-gray-800">
+<i class="ri-menu-line text-xl"></i>
+</button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="hero-section pt-24 min-h-[700px] flex items-center relative overflow-hidden">
+<div id="particles" class="absolute inset-0"></div>
+<div class="container mx-auto px-4 w-full relative">
+<div class="max-w-2xl text-white py-20">
+<div class="mb-6 inline-block relative">
+<span class="px-4 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium">Next Launch: Chandrayaan-4 in 15 Days</span>
+</div>
+<h1 class="text-6xl font-bold mb-6 leading-tight floating">Exploring Space,<br>Empowering India</h1>
+<p class="text-xl mb-8 opacity-90 max-w-xl">Pioneering space technology for national development and the pursuit of planetary exploration, pushing the boundaries of human knowledge.</p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-white text-primary px-8 py-4 font-semibold !rounded-button shadow-lg hover:bg-gray-100 transition-all hover:scale-105 whitespace-nowrap flex items-center group">
+<span>Explore Missions</span>
+<div class="w-6 h-6 ml-2 flex items-center justify-center transition-transform group-hover:translate-x-1">
+<i class="ri-arrow-right-line"></i>
+</div>
+</button>
+<button class="bg-transparent border-2 border-white text-white px-8 py-4 font-semibold !rounded-button hover:bg-white hover:text-primary transition-all hover:scale-105 whitespace-nowrap flex items-center group">
+<div class="w-6 h-6 mr-2 flex items-center justify-center">
+<i class="ri-live-line"></i>
+</div>
+<span>Watch Live</span>
+</button>
+</div>
+<div class="mt-12 flex gap-8">
+<div class="flex items-center">
+<div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mr-4">
+<i class="ri-rocket-line text-2xl"></i>
+</div>
+<div>
+<div class="text-2xl font-bold">150+</div>
+<div class="text-sm opacity-80">Successful Launches</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mr-4">
+<i class="ri-earth-line text-2xl"></i>
+</div>
+<div>
+<div class="text-2xl font-bold">75+</div>
+<div class="text-sm opacity-80">International Partners</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Mission Countdown -->
+<section class="bg-white py-8 shadow-md relative -mt-16 rounded-lg max-w-5xl mx-auto">
+<div class="container mx-auto px-4">
+<div class="flex flex-col md:flex-row items-center justify-between">
+<div class="mb-6 md:mb-0 md:mr-6">
+<h3 class="text-xl font-bold text-primary">Next Mission Launch</h3>
+<p class="text-gray-600">Chandrayaan-4 Lunar Mission</p>
+</div>
+<div class="flex gap-6">
+<div class="text-center">
+<div class="text-3xl font-bold text-primary">15</div>
+<div class="text-gray-600 text-sm">Days</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-primary">07</div>
+<div class="text-gray-600 text-sm">Hours</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-primary">23</div>
+<div class="text-gray-600 text-sm">Minutes</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-primary">42</div>
+<div class="text-gray-600 text-sm">Seconds</div>
+</div>
+</div>
+<button class="bg-primary text-white px-4 py-2 !rounded-button mt-6 md:mt-0 whitespace-nowrap">Watch Live</button>
+</div>
+</div>
+</section>
+<!-- Latest News & Updates -->
+<section class="py-20">
+<div class="container mx-auto px-4">
+<div class="flex justify-between items-center mb-10">
+<h2 class="text-3xl font-bold text-gray-900">Latest News & Updates</h2>
+<div class="flex space-x-2">
+<button class="px-4 py-2 text-gray-600 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors">All</button>
+<button class="px-4 py-2 text-gray-600 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors">Missions</button>
+<button class="px-4 py-2 text-gray-600 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors">Technology</button>
+<button class="px-4 py-2 text-gray-600 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors">Research</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-shadow">
+<div class="relative h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20modern%20space%20satellite%20orbiting%20Earth%20with%20solar%20panels%20extended%2C%20capturing%20detailed%20imagery%20of%20the%20Indian%20subcontinent.%20The%20satellite%20has%20ISRO%20markings%20and%20advanced%20sensing%20equipment.%20Earth%20appears%20below%20with%20blue%20oceans%20and%20cloud%20formations.%20The%20scene%20shows%20the%20technological%20advancement%20of%20Indias%20space%20program.&width=600&height=400&seq=isro2&orientation=landscape" alt="ISRO launches new satellite" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+<div class="absolute top-0 left-0 bg-primary text-white px-3 py-1 news-date font-medium">
+08 May 2025
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900">ISRO Successfully Launches EOS-07 Earth Observation Satellite</h3>
+<p class="text-gray-600 mb-4">The Indian Space Research Organisation has successfully launched its latest Earth observation satellite, enhancing India's capabilities in resource monitoring and disaster management.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Read More
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-shadow">
+<div class="relative h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20team%20of%20ISRO%20scientists%20and%20engineers%20in%20a%20high-tech%20control%20room%20with%20multiple%20large%20screens%20displaying%20spacecraft%20telemetry%20data.%20The%20team%20is%20celebrating%20a%20successful%20mission%20with%20expressions%20of%20joy.%20The%20control%20room%20has%20advanced%20computer%20systems%20and%20a%20large%20central%20display%20showing%20a%20spacecraft%20trajectory.%20Indian%20flags%20visible%20in%20the%20background.&width=600&height=400&seq=isro3&orientation=landscape" alt="ISRO scientists" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+<div class="absolute top-0 left-0 bg-primary text-white px-3 py-1 news-date font-medium">
+05 May 2025
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900">ISRO and NASA Sign New Agreement for Joint Space Missions</h3>
+<p class="text-gray-600 mb-4">A landmark agreement between ISRO and NASA will see the two space agencies collaborate on future missions to explore Mars and establish a lunar research station.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Read More
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-shadow">
+<div class="relative h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20close-up%20view%20of%20a%20powerful%20ISRO%20rocket%20launch%20with%20flames%20and%20smoke%20billowing%20from%20the%20launch%20pad.%20The%20rocket%20is%20ascending%20against%20a%20clear%20blue%20sky%20with%20the%20Indian%20flag%20visible%20on%20its%20side.%20The%20launch%20complex%20shows%20sophisticated%20infrastructure%20with%20support%20towers%20and%20water%20deluge%20systems.%20The%20scene%20captures%20the%20power%20and%20precision%20of%20Indias%20space%20program.&width=600&height=400&seq=isro4&orientation=landscape" alt="Rocket launch" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+<div class="absolute top-0 left-0 bg-primary text-white px-3 py-1 news-date font-medium">
+29 Apr 2025
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900">ISRO Unveils New Heavy-Lift Rocket for Deep Space Missions</h3>
+<p class="text-gray-600 mb-4">The next-generation heavy-lift launch vehicle will enable India to send heavier payloads into orbit and beyond, supporting ambitious interplanetary missions.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Read More
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="text-center mt-10">
+<button class="border border-primary text-primary px-6 py-3 !rounded-button font-medium hover:bg-primary hover:text-white transition-colors whitespace-nowrap">View All News</button>
+</div>
+</div>
+</section>
+<!-- Mission Highlights -->
+<section class="py-20 bg-gray-100">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-gray-900 mb-10">Mission Highlights</h2>
+<div class="flex overflow-x-auto pb-6 gap-6 hide-scrollbar">
+<div class="mission-card min-w-[300px] w-[300px] bg-white rounded-lg shadow-md overflow-hidden relative group">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20detailed%20view%20of%20the%20Chandrayaan%20lunar%20lander%20on%20the%20moons%20surface%20with%20Earth%20visible%20in%20the%20black%20sky.%20The%20lander%20has%20solar%20panels%20extended%20and%20scientific%20instruments%20deployed%20on%20the%20lunar%20surface.%20The%20scene%20shows%20the%20desolate%2C%20cratered%20lunar%20landscape%20with%20long%20shadows.%20The%20image%20captures%20Indias%20achievement%20in%20lunar%20exploration.&width=600&height=400&seq=isro5&orientation=landscape" alt="Chandrayaan-3" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold text-gray-900">Chandrayaan-3</h3>
+<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+</div>
+<p class="text-gray-600 mb-4">Lunar exploration mission that successfully landed on the Moon's south pole region.</p>
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-500">Launched: Jul 14, 2023</span>
+<button class="text-primary flex items-center text-sm font-medium">
+Details
+<div class="w-4 h-4 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-s-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="mission-overlay absolute inset-0 bg-primary bg-opacity-90 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<div class="text-center text-white p-6">
+<h3 class="text-xl font-bold mb-2">Chandrayaan-3</h3>
+<p class="mb-4">India's third lunar exploration mission, successfully landed near the lunar south pole on August 23, 2023.</p>
+<button class="border border-white text-white px-4 py-2 !rounded-button hover:bg-white hover:text-primary transition-colors whitespace-nowrap">Mission Details</button>
+</div>
+</div>
+</div>
+<div class="mission-card min-w-[300px] w-[300px] bg-white rounded-lg shadow-md overflow-hidden relative group">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20spacecraft%20approaching%20Mars%20with%20the%20red%20planet%20filling%20the%20frame.%20The%20orbiter%20has%20distinctive%20ISRO%20markings%20and%20extended%20solar%20arrays.%20Mars%20surface%20details%20are%20visible%20with%20its%20characteristic%20reddish%20terrain%2C%20polar%20ice%20caps%2C%20and%20thin%20atmosphere.%20Stars%20are%20visible%20in%20the%20background.%20The%20image%20represents%20Indias%20Mars%20Orbiter%20Mission%20achievement.&width=600&height=400&seq=isro6&orientation=landscape" alt="Mangalyaan" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold text-gray-900">Mangalyaan</h3>
+<span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">Completed</span>
+</div>
+<p class="text-gray-600 mb-4">India's first interplanetary mission to orbit and study Mars.</p>
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-500">Launched: Nov 5, 2013</span>
+<button class="text-primary flex items-center text-sm font-medium">
+Details
+<div class="w-4 h-4 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-s-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="mission-overlay absolute inset-0 bg-primary bg-opacity-90 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<div class="text-center text-white p-6">
+<h3 class="text-xl font-bold mb-2">Mangalyaan</h3>
+<p class="mb-4">Mars Orbiter Mission (MOM) was India's first interplanetary mission, making ISRO the fourth space agency to reach Mars orbit.</p>
+<button class="border border-white text-white px-4 py-2 !rounded-button hover:bg-white hover:text-primary transition-colors whitespace-nowrap">Mission Details</button>
+</div>
+</div>
+</div>
+<div class="mission-card min-w-[300px] w-[300px] bg-white rounded-lg shadow-md overflow-hidden relative group">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20sophisticated%20Earth%20observation%20satellite%20in%20orbit%20with%20multiple%20imaging%20sensors%20and%20solar%20panels%20extended.%20The%20satellite%20is%20capturing%20detailed%20imagery%20of%20the%20Indian%20subcontinent%20below%20with%20visible%20coastlines%20and%20terrain%20features.%20Earth%20appears%20with%20blue%20oceans%2C%20green%20landmasses%20and%20white%20cloud%20formations.%20The%20scene%20demonstrates%20Indias%20remote%20sensing%20capabilities.&width=600&height=400&seq=isro7&orientation=landscape" alt="RISAT" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold text-gray-900">RISAT-2B</h3>
+<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+</div>
+<p class="text-gray-600 mb-4">Radar Imaging Satellite for all-weather earth observation.</p>
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-500">Launched: May 22, 2019</span>
+<button class="text-primary flex items-center text-sm font-medium">
+Details
+<div class="w-4 h-4 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-s-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="mission-overlay absolute inset-0 bg-primary bg-opacity-90 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<div class="text-center text-white p-6">
+<h3 class="text-xl font-bold mb-2">RISAT-2B</h3>
+<p class="mb-4">Radar Imaging Satellite with day-night, all-weather monitoring capabilities for agriculture, forestry and disaster management.</p>
+<button class="border border-white text-white px-4 py-2 !rounded-button hover:bg-white hover:text-primary transition-colors whitespace-nowrap">Mission Details</button>
+</div>
+</div>
+</div>
+<div class="mission-card min-w-[300px] w-[300px] bg-white rounded-lg shadow-md overflow-hidden relative group">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20close-up%20view%20of%20an%20advanced%20communication%20satellite%20in%20Earth%20orbit%20with%20large%20deployed%20solar%20arrays%20and%20multiple%20communication%20antennas.%20The%20satellite%20has%20ISRO%20markings%20and%20is%20positioned%20against%20the%20backdrop%20of%20Earth%20with%20the%20Indian%20Ocean%20visible%20below.%20Stars%20are%20visible%20in%20the%20background.%20The%20image%20represents%20Indias%20satellite%20communication%20capabilities.&width=600&height=400&seq=isro8&orientation=landscape" alt="GSAT" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold text-gray-900">GSAT-30</h3>
+<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+</div>
+<p class="text-gray-600 mb-4">Communication satellite providing coverage over the Indian subcontinent.</p>
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-500">Launched: Jan 17, 2020</span>
+<button class="text-primary flex items-center text-sm font-medium">
+Details
+<div class="w-4 h-4 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-s-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="mission-overlay absolute inset-0 bg-primary bg-opacity-90 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<div class="text-center text-white p-6">
+<h3 class="text-xl font-bold mb-2">GSAT-30</h3>
+<p class="mb-4">Communication satellite providing television, telecommunication and broadcasting services across India.</p>
+<button class="border border-white text-white px-4 py-2 !rounded-button hover:bg-white hover:text-primary transition-colors whitespace-nowrap">Mission Details</button>
+</div>
+</div>
+</div>
+<div class="mission-card min-w-[300px] w-[300px] bg-white rounded-lg shadow-md overflow-hidden relative group">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=A%20spacecraft%20approaching%20Venus%20with%20the%20planets%20characteristic%20yellowish%20cloud%20cover%20visible.%20The%20orbiter%20has%20ISRO%20markings%20and%20extended%20solar%20panels.%20Venus%20fills%20most%20of%20the%20frame%20with%20its%20thick%20atmosphere%20and%20distinctive%20cloud%20patterns.%20Stars%20are%20visible%20in%20the%20background.%20The%20image%20represents%20Indias%20future%20Venus%20exploration%20mission%20concept.&width=600&height=400&seq=isro9&orientation=landscape" alt="Shukrayaan" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-xl font-bold text-gray-900">Shukrayaan-1</h3>
+<span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Planned</span>
+</div>
+<p class="text-gray-600 mb-4">Upcoming orbiter mission to study Venus's surface and atmosphere.</p>
+<div class="flex justify-between items-center">
+<span class="text-sm text-gray-500">Launch: Dec 2025 (Expected)</span>
+<button class="text-primary flex items-center text-sm font-medium">
+Details
+<div class="w-4 h-4 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-s-line"></i>
+</div>
+</button>
+</div>
+</div>
+<div class="mission-overlay absolute inset-0 bg-primary bg-opacity-90 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<div class="text-center text-white p-6">
+<h3 class="text-xl font-bold mb-2">Shukrayaan-1</h3>
+<p class="mb-4">India's first mission to Venus, planned to study the planet's surface and atmosphere with advanced instruments.</p>
+<button class="border border-white text-white px-4 py-2 !rounded-button hover:bg-white hover:text-primary transition-colors whitespace-nowrap">Mission Details</button>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center mt-10">
+<button class="bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">View Mission Timeline</button>
+</div>
+</div>
+</section>
+<!-- Research & Technology -->
+<section class="py-20">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-gray-900 mb-10">Research & Technology</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+<div class="h-48 bg-primary/5 flex items-center justify-center">
+<div class="w-24 h-24 flex items-center justify-center text-primary text-5xl">
+<i class="ri-rocket-line"></i>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Launch Vehicle Technology</h3>
+<p class="text-gray-600 mb-4">Development of advanced propulsion systems, cryogenic engines, and reusable launch vehicles to reduce space mission costs.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Explore Research
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+<div class="h-48 bg-primary/5 flex items-center justify-center">
+<div class="w-24 h-24 flex items-center justify-center text-primary text-5xl">
+<i class="ri-satellite-line"></i>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Satellite Technology</h3>
+<p class="text-gray-600 mb-4">Research on miniaturization, high-resolution imaging systems, and advanced communication technologies for satellites.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Explore Research
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+<div class="h-48 bg-primary/5 flex items-center justify-center">
+<div class="w-24 h-24 flex items-center justify-center text-primary text-5xl">
+<i class="ri-planet-line"></i>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Planetary Sciences</h3>
+<p class="text-gray-600 mb-4">Studies of lunar and planetary surfaces, atmospheres, and potential resources for future space exploration missions.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Explore Research
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+<div class="h-48 bg-primary/5 flex items-center justify-center">
+<div class="w-24 h-24 flex items-center justify-center text-primary text-5xl">
+<i class="ri-earth-line"></i>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Earth Observation</h3>
+<p class="text-gray-600 mb-4">Advanced remote sensing technologies for monitoring natural resources, weather patterns, and disaster management.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Explore Research
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+<div class="h-48 bg-primary/5 flex items-center justify-center">
+<div class="w-24 h-24 flex items-center justify-center text-primary text-5xl">
+<i class="ri-space-ship-line"></i>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Human Spaceflight</h3>
+<p class="text-gray-600 mb-4">Development of life support systems, crew modules, and technologies for India's human spaceflight program, Gaganyaan.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Explore Research
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+<div class="h-48 bg-primary/5 flex items-center justify-center">
+<div class="w-24 h-24 flex items-center justify-center text-primary text-5xl">
+<i class="ri-robot-line"></i>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">Space Robotics</h3>
+<p class="text-gray-600 mb-4">Research on autonomous robots, rovers, and robotic systems for future planetary exploration missions.</p>
+<a href="#" class="text-primary font-medium flex items-center">
+Explore Research
+<div class="w-5 h-5 ml-1 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Media Center -->
+<section class="py-20 bg-gray-100">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-gray-900 mb-6">Media Center</h2>
+<div class="flex flex-wrap gap-4 mb-10">
+<button class="px-4 py-2 bg-primary text-white !rounded-full">All Media</button>
+<button class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-200 !rounded-full">Photos</button>
+<button class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-200 !rounded-full">Videos</button>
+<button class="px-4 py-2 bg-white text-gray-700 hover:bg-gray-200 !rounded-full">Publications</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=A%20detailed%20close-up%20of%20an%20ISRO%20rocket%20on%20the%20launchpad%20with%20support%20structures%20visible.%20The%20rocket%20has%20the%20Indian%20flag%20and%20ISRO%20logo%20prominently%20displayed.%20The%20scene%20shows%20pre-launch%20preparations%20with%20steam%20venting%20from%20the%20rocket.%20The%20image%20captures%20the%20engineering%20precision%20of%20Indias%20space%20program.&width=400&height=400&seq=isro10&orientation=squarish" alt="Rocket launch" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=A%20view%20of%20Earth%20from%20space%20showing%20the%20Indian%20subcontinent%20at%20night%20with%20city%20lights%20visible.%20The%20curvature%20of%20Earth%20is%20apparent%20with%20the%20thin%20blue%20atmosphere%20line.%20Stars%20are%20visible%20in%20the%20background.%20The%20image%20captures%20the%20beauty%20of%20Earth%20from%20orbit%20as%20seen%20by%20ISRO%20satellites.&width=400&height=400&seq=isro11&orientation=squarish" alt="Earth from space" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=A%20lunar%20rover%20on%20the%20Moons%20surface%20with%20Earth%20visible%20in%20the%20black%20sky.%20The%20rover%20has%20ISRO%20markings%20and%20is%20equipped%20with%20scientific%20instruments%20and%20cameras.%20The%20lunar%20surface%20shows%20craters%20and%20regolith.%20The%20scene%20represents%20Indias%20lunar%20exploration%20capabilities.&width=400&height=400&seq=isro12&orientation=squarish" alt="Lunar rover" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=ISRO%20scientists%20in%20a%20clean%20room%20facility%20working%20on%20satellite%20components.%20The%20scientists%20are%20wearing%20white%20clean%20room%20suits%20and%20handling%20sophisticated%20space%20hardware.%20The%20clean%20room%20has%20advanced%20equipment%20and%20bright%20lighting.%20The%20image%20shows%20the%20precision%20engineering%20behind%20Indias%20space%20program.&width=400&height=400&seq=isro13&orientation=squarish" alt="Scientists working" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=A%20close-up%20view%20of%20a%20satellite%20being%20assembled%20in%20an%20ISRO%20clean%20room%20facility.%20Engineers%20in%20clean%20room%20suits%20are%20working%20on%20the%20sophisticated%20electronics%20and%20components.%20The%20satellite%20has%20solar%20panels%20and%20communication%20antennas.%20The%20scene%20shows%20the%20high-tech%20manufacturing%20capabilities%20of%20Indias%20space%20program.&width=400&height=400&seq=isro14&orientation=squarish" alt="Satellite assembly" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=An%20aerial%20view%20of%20ISROs%20launch%20complex%20at%20Sriharikota%20with%20multiple%20launch%20pads%20and%20support%20facilities%20visible.%20The%20complex%20is%20situated%20near%20the%20coastline%20with%20water%20visible.%20The%20facilities%20include%20assembly%20buildings%2C%20tracking%20stations%2C%20and%20control%20centers.%20The%20image%20showcases%20Indias%20space%20infrastructure.&width=400&height=400&seq=isro15&orientation=squarish" alt="Launch complex" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=A%20detailed%20view%20of%20Mars%20captured%20by%20an%20Indian%20spacecraft%20showing%20the%20red%20planets%20surface%20features.%20The%20image%20shows%20Mars%20characteristic%20reddish%20terrain%2C%20polar%20ice%20caps%2C%20and%20some%20surface%20details%20like%20Valles%20Marineris.%20The%20scene%20represents%20data%20collected%20by%20Indias%20Mars%20Orbiter%20Mission.&width=400&height=400&seq=isro16&orientation=squarish" alt="Mars surface" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-lg">
+<img src="https://readdy.ai/api/search-image?query=A%20mission%20control%20room%20at%20ISRO%20with%20multiple%20screens%20displaying%20spacecraft%20telemetry%20and%20Earth%20imagery.%20Scientists%20and%20engineers%20are%20working%20at%20computer%20stations%20monitoring%20mission%20data.%20The%20control%20room%20has%20a%20large%20central%20display%20showing%20a%20spacecraft%20trajectory.%20The%20scene%20captures%20the%20technological%20sophistication%20of%20Indias%20space%20operations.&width=400&height=400&seq=isro17&orientation=squarish" alt="Mission control" class="w-full h-64 object-cover object-top group-hover:scale-110 transition-transform duration-500">
+<div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center">
+<div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<div class="w-12 h-12 flex items-center justify-center bg-white text-primary rounded-full">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center mt-10">
+<button class="border border-primary text-primary px-6 py-3 !rounded-button font-medium hover:bg-primary hover:text-white transition-colors whitespace-nowrap">View Media Gallery</button>
+</div>
+</div>
+</section>
+<!-- Interactive Elements -->
+<section class="py-20">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-gray-900 mb-10">Interactive Tools</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+<div class="p-6 border-b">
+<h3 class="text-xl font-bold text-gray-900">Live Satellite Tracker</h3>
+<p class="text-gray-600">Track ISRO satellites in real-time as they orbit Earth</p>
+</div>
+<div class="satellite-tracker h-[400px] relative" id="satelliteMap">
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg z-10">
+<div class="flex items-center space-x-4 mb-4">
+<div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+<span class="font-medium">12 Active Satellites</span>
+</div>
+<div class="flex flex-col space-y-2 mb-4">
+<label class="custom-checkbox">
+<input type="checkbox" checked data-type="communication">
+<span class="checkmark"></span>
+Communication Satellites
+</label>
+<label class="custom-checkbox">
+<input type="checkbox" checked data-type="observation">
+<span class="checkmark"></span>
+Earth Observation Satellites
+</label>
+<label class="custom-checkbox">
+<input type="checkbox" checked data-type="navigation">
+<span class="checkmark"></span>
+Navigation Satellites
+</label>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap flex-1" id="refreshSatellites">
+<div class="flex items-center justify-center">
+<i class="ri-refresh-line mr-2"></i>
+<span>Refresh</span>
+</div>
+</button>
+<button class="bg-gray-200 text-gray-700 px-4 py-2 !rounded-button whitespace-nowrap hover:bg-gray-300" id="centerMap">
+<i class="ri-focus-2-line"></i>
+</button>
+</div>
+</div>
+<div id="satelliteTooltip" class="satellite-tooltip"></div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+<div class="p-6 border-b">
+<h3 class="text-xl font-bold text-gray-900">Mission Data Visualization</h3>
+<p class="text-gray-600">Explore data from ISRO's recent space missions</p>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center space-x-4">
+<select class="border-none bg-gray-100 rounded-lg py-2 pl-4 pr-8 focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option>Chandrayaan-3</option>
+<option>Mangalyaan</option>
+<option>RISAT-2B</option>
+</select>
+<select class="border-none bg-gray-100 rounded-lg py-2 pl-4 pr-8 focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option>Temperature</option>
+<option>Radiation</option>
+<option>Imagery</option>
+</select>
+</div>
+<div class="flex items-center">
+<span class="mr-2 text-sm text-gray-600">Live Updates</span>
+<label class="custom-switch">
+<input type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+</div>
+<div id="missionChart" class="h-[300px]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter -->
+<section class="py-20 bg-primary">
+<div class="container mx-auto px-4">
+<div class="max-w-3xl mx-auto text-center">
+<h2 class="text-3xl font-bold text-white mb-4">Stay Updated with ISRO</h2>
+<p class="text-white/80 mb-8">Subscribe to our newsletter for the latest mission updates, research breakthroughs, and space exploration news</p>
+<div class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+<input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-button border-none focus:outline-none focus:ring-2 focus:ring-white/20">
+<button class="bg-white text-primary px-6 py-3 font-semibold !rounded-button hover:bg-gray-100 transition-colors whitespace-nowrap">Subscribe</button>
+</div>
+<p class="text-white/60 text-sm mt-4">By subscribing, you agree to our Privacy Policy and consent to receive updates from ISRO.</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-16">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+<div>
+<div class="text-3xl font-['Pacifico'] mb-6">ISRO</div>
+<p class="text-gray-400 mb-6">Indian Space Research Organisation is the space agency of the Government of India, headquartered in Bengaluru.</p>
+<div class="flex space-x-4">
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+<i class="ri-twitter-x-line"></i>
+</a>
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+<i class="ri-facebook-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+<i class="ri-instagram-line"></i>
+</a>
+<a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors">
+<i class="ri-youtube-line"></i>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-lg font-bold mb-6">Quick Links</h3>
+<ul class="space-y-3">
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">About ISRO</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Current Missions</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Research & Development</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Technology Transfer</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Publications</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Career Opportunities</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-lg font-bold mb-6">Contact Information</h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mr-3 mt-1 text-gray-400">
+<i class="ri-map-pin-line"></i>
+</div>
+<span class="text-gray-400">ISRO Headquarters, Antariksh Bhavan, New BEL Road, Bengaluru, Karnataka 560094</span>
+</li>
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3 text-gray-400">
+<i class="ri-phone-line"></i>
+</div>
+<span class="text-gray-400">+91 80 2217 2465</span>
+</li>
+<li class="flex items-center">
+<div class="w-5 h-5 flex items-center justify-center mr-3 text-gray-400">
+<i class="ri-mail-line"></i>
+</div>
+<span class="text-gray-400">info@isro.gov.in</span>
+</li>
+</ul>
+</div>
+<div>
+<h3 class="text-lg font-bold mb-6">Government Links</h3>
+<ul class="space-y-3">
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Ministry of Space</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Department of Space</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">National Remote Sensing Centre</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Space Applications Centre</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Government of India Portal</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+<div class="mb-4 md:mb-0">
+<p class="text-gray-500">© 2025 Indian Space Research Organisation. All Rights Reserved.</p>
+</div>
+<div class="flex space-x-6">
+<a href="#" class="text-gray-500 hover:text-white transition-colors">Terms of Use</a>
+<a href="#" class="text-gray-500 hover:text-white transition-colors">Privacy Policy</a>
+<a href="#" class="text-gray-500 hover:text-white transition-colors">Sitemap</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// Particle Effect
+function createParticle() {
+  const particles = document.getElementById('particles');
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  
+  const size = Math.random() * 2 + 1;
+  particle.style.width = `${size}px`;
+  particle.style.height = `${size}px`;
+  
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight;
+  particle.style.left = `${startX}px`;
+  particle.style.top = `${startY}px`;
+  
+  particles.appendChild(particle);
+  
+  setTimeout(() => {
+    particle.style.opacity = '0.8';
+    particle.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`;
+    particle.style.transition = 'all 3s linear';
+  }, 100);
+  
+  setTimeout(() => {
+    particle.remove();
+  }, 3000);
+}
+setInterval(createParticle, 100);
+// Satellite Tracker
+const satellites = [
+  { id: 1, name: 'GSAT-30', type: 'communication', lat: 28, lng: 45 },
+  { id: 2, name: 'RISAT-2B', type: 'observation', lat: 35, lng: 75 },
+  { id: 3, name: 'NavIC-1', type: 'navigation', lat: 15, lng: 90 },
+  // Add more satellites as needed
+];
+function updateSatellites() {
+  const map = document.getElementById('satelliteMap');
+  const tooltip = document.getElementById('satelliteTooltip');
+  
+  // Remove existing satellites
+  document.querySelectorAll('.satellite-dot').forEach(dot => dot.remove());
+  
+  // Add new satellites
+  satellites.forEach(sat => {
+    const dot = document.createElement('div');
+    dot.className = 'satellite-dot';
+    dot.style.left = `${(sat.lng + 180) * (map.offsetWidth / 360)}px`;
+    dot.style.top = `${(90 - sat.lat) * (map.offsetHeight / 180)}px`;
+    
+    dot.addEventListener('mouseenter', () => {
+      tooltip.style.opacity = '1';
+      tooltip.style.left = `${dot.offsetLeft + 20}px`;
+      tooltip.style.top = `${dot.offsetTop - 30}px`;
+      tooltip.textContent = `${sat.name} (${sat.type})`;
+    });
+    
+    dot.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+    });
+    
+    map.appendChild(dot);
+  });
+}
+document.getElementById('refreshSatellites').addEventListener('click', () => {
+  // Simulate satellite movement
+  satellites.forEach(sat => {
+    sat.lat += (Math.random() - 0.5) * 5;
+    sat.lng += (Math.random() - 0.5) * 5;
+  });
+  updateSatellites();
+});
+document.getElementById('centerMap').addEventListener('click', () => {
+  // Center map on India
+  // Implementation would depend on your map library
+});
+// Initial satellite update
+updateSatellites();
+// Mission Chart
+const chartDom = document.getElementById('missionChart');
+const myChart = echarts.init(chartDom);
+const option = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+textStyle: {
+color: '#1f2937'
+}
+},
+grid: {
+top: 10,
+right: 10,
+bottom: 20,
+left: 50
+},
+xAxis: {
+type: 'category',
+data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+axisLine: {
+lineStyle: {
+color: '#1f2937'
+}
+}
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: {
+color: '#1f2937'
+}
+},
+splitLine: {
+lineStyle: {
+color: 'rgba(31, 41, 55, 0.1)'
+}
+}
+},
+series: [
+{
+name: 'Temperature',
+type: 'line',
+smooth: true,
+data: [125, 132, 141, 138, 145, 160, 155, 142, 148],
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)',
+width: 3
+},
+symbol: 'none',
+areaStyle: {
+color: {
+type: 'linear',
+x: 0,
+y: 0,
+x2: 0,
+y2: 1,
+colorStops: [
+{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.2)'
+},
+{
+offset: 1,
+color: 'rgba(87, 181, 231, 0.01)'
+}
+]
+}
+}
+}
+],
+color: ['rgba(87, 181, 231, 1)', 'rgba(141, 211, 199, 1)', 'rgba(251, 191, 114, 1)', 'rgba(252, 141, 98, 1)'],
+textStyle: {
+color: '#1f2937'
+}
+};
+myChart.setOption(option);
+window.addEventListener('resize', function() {
+myChart.resize();
+});
+});
+</script>
+</body>
+</html>
